@@ -29,7 +29,7 @@ hack.exe : $(OBJS)
 #	how to compile all the object files
 #
 $(OBJS) : $*.c
-	msc $(CFLAGS) $*.c;
+	cl $(CFLAGS) /c $*.c
 
 
 #	Other dependencies

@@ -126,7 +126,7 @@ register char *st1;
 		extern struct monst *mydogs;
 		register struct monst *mtmp;
 		register struct obj *otmp;
-#define DGK
+#ifdef DGK
 		long i;
 #else
 		register int i;
@@ -480,12 +480,14 @@ char linebuf[BUFSZ];
 	return(strlen(linebuf));
 }
 
+#ifdef NEED_ITOA
 char *
 itoa(a) int a; {
 static char buf[12];
 	Sprintf(buf,"%d",a);
 	return(buf);
 }
+#endif
 
 char *
 ordin(n) int n; {
