@@ -1,14 +1,37 @@
 /* An assortment of MSDOS functions.
  */
-
+#include <windows.h>
+HANDLE hConsoleOut;
+HANDLE hConsoleIn;
 #include <stdio.h>
 #include "hack.h"
 
 #ifdef MSDOS
-#include <dos.h>
+#include "date.h"
 
-init_msdos()
-{}
+void init_msdos()
+{
+	char *buf;
+	int num;
+
+	COORD Coords;
+	CONSOLE_SCREEN_BUFFER_INFO screeninfo;
+	
+	GetConsoleScreenBufferInfo(hConsoleOut,&screeninfo);
+	num=screeninfo.dwSize.X * screeninfo.dwSize.Y;
+	buf=malloc(num);
+	memset(buf,' ',num);
+	WriteConsole(hConsoleOut,buf,num,0,NULL);
+
+	sprintf(buf,"PC-Hack 1.0.3 - last edit %s.",datestring);
+	SetConsoleTitle(buf);
+	Coords.X=0;
+	Coords.Y=0;
+	SetConsoleCursorPosition(hConsoleOut,Coords);
+hConsoleOut = GetStdHandle(STD_OUTPUT_HANDLE);
+hConsoleIn  = GetStdHandle(STD_INPUT_HANDLE);
+}
+
 
 getuid()
 {
@@ -21,50 +44,37 @@ getlogin()
 	return ((char *) NULL);
 }
 
-#define VIDEO 0x10
-int display_page = -1;
+
 
 void
 fastat(x, y, ch)
 register xchar x,y;
 char ch;
 {
-	union REGS inregs;
 
 	if(!ch) {
 		impossible("At gets null at %d %d.", x, y);
 		return;
 	}
-	if (display_page < 0) {
-		inregs.h.ah = 15;
-		int86(VIDEO, &inregs, &inregs);
-		display_page = inregs.h.bh;
-	}
+
 	if (x != curx || y != cury) {
-		inregs.h.ah = 2;
-		inregs.h.dl = x - 1;
-		inregs.h.dh = y + 1;
-		inregs.h.bh = display_page;
-		int86(VIDEO, &inregs, &inregs);
-		curx = x;
-		cury = y;
+	COORD Coords;
+	DWORD Dummy;
+	Coords.X=x-1;
+	Coords.Y=y+1;
+
+	SetConsoleCursorPosition(hConsoleOut,Coords);
+
+	curx = x;
+	cury = y;
 	}
-	inregs.h.ah = 14;
-	inregs.h.al = ch;
-	inregs.h.bh = display_page;
-	inregs.x.cx = 1;
-	int86(VIDEO, &inregs, &inregs);
+	WriteConsole(hConsoleOut,ch,1,0,NULL);
 	curx++;
 }
 
 tgetch()
 {
 	char ch;
-#ifdef DGK
-	if (flags.BIOSok)
-		ch = BIOSgetch();
-	else
-#endif DGK
 		ch = getch();
 	return ((ch == '\r') ? '\n' : ch);
 }
@@ -147,6 +157,7 @@ static struct {
 static char
 BIOSgetch()
 {
+#if 0
 	char scan, shift_state, ch;
 	union REGS inregs, outregs;
 
@@ -168,6 +179,7 @@ BIOSgetch()
 		else
 			ch = keypad[scan - KEYPADLOW].normal;
 	return (ch);
+#endif
 }
 
 dotogglepickup()
@@ -239,6 +251,7 @@ long
 freediskspace(path)
 char *path;
 {
+#if 0
 	int drive = 0;
 	union	REGS	inregs;
 	union	REGS	outregs;
@@ -251,6 +264,9 @@ char *path;
 	if (outregs.x.ax == 0xFFFF)
 		return (-1);		/* bad drive number */
 	return ((long) outregs.x.bx * outregs.x.cx * outregs.x.ax);
+#else
+return 65535;
+#endif
 }
 
 long
@@ -609,6 +625,7 @@ void
 chdrive(str)
 char *str;
 {
+#if 0
 	char *ptr;
 	union REGS inregs;
 	char drive;
@@ -619,6 +636,7 @@ char *str;
 		inregs.h.dl = drive - 'A';
 		intdos(&inregs, &inregs);
 	}
+#endif
 }
 
 #endif DGK
