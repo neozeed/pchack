@@ -6,7 +6,7 @@
 #include "hack.h"
 #define	Sprintf	(void) sprintf
 extern char plname[], pl_character[];
-extern char *itoa(), *ordin(), *eos();
+extern char *hitoa(), *ordin(), *eos();
 extern boolean female;			/* should have been flags.female */
 xchar maxdlevel = 1;
 
@@ -454,7 +454,7 @@ char linebuf[BUFSZ];
 	  register char *bp = eos(linebuf);
 	  char hpbuf[10];
 	  int hppos;
-	  Sprintf(hpbuf, (t1->hp > 0) ? itoa(t1->hp) : "-");
+	  Sprintf(hpbuf, (t1->hp > 0) ? hitoa(t1->hp) : "-");
 	  hppos = COLNO - 7 - strlen(hpbuf);
 	  if(bp <= linebuf + hppos) {
 	    while(bp < linebuf + hppos) *bp++ = ' ';
@@ -480,14 +480,13 @@ char linebuf[BUFSZ];
 	return(strlen(linebuf));
 }
 
-#ifdef NEED_ITOA
+/*hack itoa	*/
 char *
-itoa(a) int a; {
+hitoa(a) int a; {
 static char buf[12];
 	Sprintf(buf,"%d",a);
 	return(buf);
 }
-#endif
 
 char *
 ordin(n) int n; {

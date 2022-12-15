@@ -2,8 +2,14 @@
 # 	Makefile 
 # 
 
+CC=cl
+
 # Large memory model, register bug, optimize for time, remove stack probes:
 CFLAGS = -AL -DREGBUG -DLINT_ARGS -Ot -Gs
+
+# Watcom huge memory model
+# CC=wcl
+# CFLAGS = /0 /Ml /DREGBUG /DLINT_ARGS /bt=DOS /j /os
 
 # All object modules
 OBJS = decl.obj apply.obj bones.obj cmd.obj do.obj \
@@ -29,7 +35,7 @@ hack.exe : $(OBJS)
 #	how to compile all the object files
 #
 $(OBJS) : $*.c
-	cl $(CFLAGS) /c $*.c
+	$(CC) $(CFLAGS) /c $*.c
 
 
 #	Other dependencies

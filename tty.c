@@ -78,7 +78,6 @@ gettty(){
 #ifdef MSDOS
 	erase_char = '\b';
 	kill_char = 21;		/* cntl-U */
-	init_msdos();
 #else
 	if(GTTY(&inittyb) < 0)
 		perror("Hack (gettty)");

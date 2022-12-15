@@ -3,7 +3,7 @@
 
 #include "hack.h"
 #include "mfndpos.h"
-#define	NULL	(char *) 0
+#define	HNULL	(char *) 0
 extern struct monst *makemon();
 extern struct obj *mkobj_at();
 
@@ -340,8 +340,8 @@ not_special:
 	}
 
 	/* look for gold or jewels nearby */
-	likegold = (index("LOD", msym) != NULL);
-	likegems = (index("ODu", msym) != NULL);
+	likegold = (index("LOD", msym) != HNULL);
+	likegems = (index("ODu", msym) != HNULL);
 	likeobjs = mtmp->mhide;
 #define	SRCHRADIUS	25
 	{ xchar mind = SRCHRADIUS;		/* not too far away */

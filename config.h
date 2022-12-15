@@ -142,7 +142,7 @@ typedef	xchar	boolean;		/* 0 or 1 */
 #	undef getchar
 #endif getchar
 #define getchar tgetch
-#define DGK			/* enhancements by dgk */
+#define DGK	1		/* enhancements by dgk */
 
 #ifdef DGK
 #	include "msdos.h"	/* contains necessary externs for msdos.c */

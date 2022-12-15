@@ -26,7 +26,8 @@ typedef struct {
 #include	"flag.h"
 
 #ifndef MSDOS
-extern char *sprintf();
+/*extern char *sprintf();
+	why not include string?*/
 #endif MSDOS
 #define	plur(x)	(((x) == 1) ? "" : "s")
 

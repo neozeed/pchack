@@ -7,9 +7,6 @@
 #ifdef MSDOS
 #include <dos.h>
 
-init_msdos()
-{}
-
 getuid()
 {
 	return 1;
@@ -626,7 +623,7 @@ char *str;
 /* Do a chdir back to the original directory
  */
 #undef exit
-#if defined(MSDOS) && defined(LINT_ARGS)
+#if defined(MSDOS) /*&& defined(LINT_ARGS)*/
 void
 #endif
 msexit(code)
@@ -650,4 +647,3 @@ msexit(code)
 }
 
 #endif MSDOS
-                                                                   
